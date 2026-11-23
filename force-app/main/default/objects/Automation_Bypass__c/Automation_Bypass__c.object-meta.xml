@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>Controls which automation is bypassed for the org, a profile or a user. Read by Apex, Flows and validation rules. Managed through the Automation Bypass console or AutomationBypassAdmin.</description>
+    <enableFeeds>false</enableFeeds>
+    <label>Automation Bypass</label>
+    <visibility>Public</visibility>
+</CustomObject>

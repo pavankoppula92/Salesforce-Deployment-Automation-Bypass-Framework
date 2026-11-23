@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bypass_All__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Bypasses triggers, Flows and validation rules that use the framework.</description>
+    <inlineHelpText>Bypasses triggers, Flows and validation rules that use the framework.</inlineHelpText>
+    <label>Bypass All Automation</label>
+    <type>Checkbox</type>
+</CustomField>
