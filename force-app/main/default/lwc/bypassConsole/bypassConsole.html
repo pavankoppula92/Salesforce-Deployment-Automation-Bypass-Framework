@@ -1,0 +1,96 @@
+<template>
+    <lightning-card title="Automation Bypass Console" icon-name="utility:skip">
+        <div class="slds-p-horizontal_medium">
+            <p class="slds-m-bottom_small slds-text-color_weak">
+                Turn off triggers, Flows and validation rules for a user or the whole org while you load data or deploy.
+                Every bypass expires automatically and is recorded in the Bypass Log.
+            </p>
+
+            <lightning-radio-group
+                name="targetType"
+                label="Apply to"
+                type="button"
+                options={targetOptions}
+                value={targetType}
+                onchange={handleTargetType}>
+            </lightning-radio-group>
+
+            <template lwc:if={isUserTarget}>
+                <lightning-record-picker
+                    class="slds-m-top_small"
+                    label="User"
+                    placeholder="Search users, for example your integration user"
+                    object-api-name="User"
+                    onchange={handleUser}>
+                </lightning-record-picker>
+            </template>
+
+            <fieldset class="slds-form-element slds-m-top_medium">
+                <legend class="slds-form-element__legend slds-form-element__label">Bypass</legend>
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <lightning-input type="toggle" label="All automation" data-field="all"
+                            checked={scope.all} onchange={handleToggle} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <lightning-input type="toggle" label="Triggers" data-field="triggers"
+                            checked={scope.triggers} onchange={handleToggle} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <lightning-input type="toggle" label="Flows" data-field="flows"
+                            checked={scope.flows} onchange={handleToggle} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                        <lightning-input type="toggle" label="Validation rules" data-field="validationRules"
+                            checked={scope.validationRules} onchange={handleToggle} message-toggle-active="" message-toggle-inactive=""></lightning-input>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="slds-grid slds-wrap slds-gutters_small slds-m-top_small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-input label="Only these objects" data-field="objects" value={objects}
+                        placeholder="Account, Contact, Loan__c" onchange={handleInput}
+                        field-level-help="Bypass triggers and Flows on these objects only. Leave blank if you used the switches above.">
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                    <lightning-input label="Only these trigger handlers" data-field="handlers" value={handlers}
+                        placeholder="AccountTriggerHandler" onchange={handleInput}>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <lightning-input type="number" label="Expires after (hours)" data-field="hours" value={hours}
+                        min="1" max="72" required onchange={handleInput}>
+                    </lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-4">
+                    <lightning-input label="Reason" data-field="reason" value={reason} required
+                        placeholder="Wave 2 account migration, ticket MIG-142" onchange={handleInput}>
+                    </lightning-input>
+                </div>
+            </div>
+
+            <div class="slds-m-top_medium">
+                <lightning-button variant="brand" label="Enable bypass" icon-name="utility:pause"
+                    onclick={handleEnable} disabled={isSaving}></lightning-button>
+            </div>
+        </div>
+
+        <div class="slds-p-around_medium">
+            <h3 class="slds-text-heading_small slds-m-bottom_x-small">Current bypasses</h3>
+            <template lwc:if={hasBypasses}>
+                <lightning-datatable
+                    key-field="id"
+                    data={rows}
+                    columns={columns}
+                    hide-checkbox-column
+                    onrowaction={handleRowAction}>
+                </lightning-datatable>
+            </template>
+            <template lwc:else>
+                <p class="slds-text-color_weak">No bypasses are active. All automation is running normally.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>
